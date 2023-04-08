@@ -2,7 +2,7 @@
 
 namespace GameArchive.Repositorios.Interfaces
 {
-    public interface IGeneroModel
+    public interface IGeneroRepositorio
     {
         Task<List<Models.GeneroModel>> BuscarTodos();
         Task<Models.GeneroModel> BuscarPorId(int id);

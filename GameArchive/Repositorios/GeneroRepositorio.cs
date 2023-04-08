@@ -2,7 +2,7 @@
 
 namespace GameArchive.Repositorios.Interfaces
 {
-    public class GeneroModel : IGeneroModel
+    public class GeneroRepositorio : IGeneroRepositorio
     {
         public Task<Models.GeneroModel> Adicionar(Models.GeneroModel genero)
         {

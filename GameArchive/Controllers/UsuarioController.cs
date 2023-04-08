@@ -1,4 +1,5 @@
 ﻿using GameArchive.Models;
+using GameArchive.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,12 @@ namespace GameArchive.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        //private readonly ITarefaRepositorio _tarefaRepositorio;
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
 
-        //public TarefaController(ITarefaRepositorio tarefaRepositorio)
-        //{
-        //    _tarefaRepositorio = tarefaRepositorio;
-        //}
+        public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
+        {
+            _usuarioRepositorio = usuarioRepositorio;
+        }
 
         //[HttpGet]
         //public async Task<int> Logar([FromBody] UsuarioModel usuarioModel)
@@ -26,6 +27,45 @@ namespace GameArchive.Controllers
 
         //    throw new Exception("Usuário ou senha incorretos.");
         //}
+
+        [HttpGet]
+        public async Task<ActionResult<List<UsuarioModel>>> BuscarTodosUsuarios()
+        {
+            var usuarios = await _usuarioRepositorio.BuscarTodos();
+
+            return Ok(usuarios);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<UsuarioModel>>> BuscarPorId(int id)
+        {
+            var usuario = await _usuarioRepositorio.BuscarPorId(id);
+            return Ok(usuario);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UsuarioModel>> Cadastrar([FromBody] UsuarioModel usuarioModel)
+        {
+            var usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
+
+            return Ok(usuario);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UsuarioModel>> Atualizar([FromBody] UsuarioModel usuarioModel, int id)
+        {
+            usuarioModel.Id = id;
+            var usuario = await _usuarioRepositorio.Atualizar(usuarioModel, id);
+            return Ok(usuario);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<UsuarioModel>> Apagar(int id)
+        {
+            var apagado = await _usuarioRepositorio.Apagar(id);
+
+            return Ok(apagado);
+        }
 
     }
 }

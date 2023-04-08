@@ -1,4 +1,8 @@
 
+using GameArchive.Data;
+using GameArchive.Repositorios.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 namespace GameArchive
 {
     public class Program
@@ -14,6 +18,21 @@ namespace GameArchive
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Configuração do entity framework
+            builder.Services.AddEntityFrameworkSqlServer()
+                .AddDbContext<GameArchiveDbContext>(
+                    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+                );
+
+            //Injeção de dependencia dos repositórios
+            builder.Services.AddScoped<IDesenvolvedoraRepositorio, DesenvolvedoraRepositorio>();
+            builder.Services.AddScoped<IGeneroRepositorio, GeneroRepositorio>();
+            builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
+            builder.Services.AddScoped<IPlataformaRepositorio, PlataformaRepositorio>();
+            builder.Services.AddScoped<IPlataformaUsuarioRepositorio, PlataformaUsuarioRepositorio>();
+            builder.Services.AddScoped<IUsuarioJogoRepositorio, UsuarioJogoRepositorio>();
+            builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,7 +45,6 @@ namespace GameArchive
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

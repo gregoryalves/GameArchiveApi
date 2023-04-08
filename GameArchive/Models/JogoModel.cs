@@ -10,5 +10,6 @@
         public virtual DesenvolvedoraModel? Desenvolvedora { get; set; }
         public int GeneroId { get; set; }
         public virtual GeneroModel? Genero { get; set; }
+        public int FaixaEtaria { get; set; }
     }
 }
