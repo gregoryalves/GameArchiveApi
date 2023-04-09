@@ -69,9 +69,7 @@ namespace GameArchive.Repositorios.Interfaces
             return true;
         }
 
-
-
-        public Task<int> Logar(UsuarioModel usuario)
+        public Task<long> Logar(UsuarioModel usuario)
         {
             throw new NotImplementedException();
         }
