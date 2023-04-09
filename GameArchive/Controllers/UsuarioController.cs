@@ -16,20 +16,9 @@ namespace GameArchive.Controllers
         {
             _usuarioRepositorio = usuarioRepositorio;
         }
-
-        //[HttpGet]
-        //public async Task<int> Logar([FromBody] UsuarioModel usuarioModel)
-        //{
-        //    var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
-
-        //    if (usuarioId > 0)
-        //        return Ok(usuarioId);
-
-        //    throw new Exception("Usuário ou senha incorretos.");
-        //}
-
+        
         [HttpGet]
-        public async Task<ActionResult<List<UsuarioModel>>> BuscarTodosUsuarios()
+        public async Task<ActionResult<List<UsuarioModel>>> BuscarTodos()
         {
             var usuarios = await _usuarioRepositorio.BuscarTodos();
 
@@ -37,7 +26,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<UsuarioModel>>> BuscarPorId(int id)
+        public async Task<ActionResult<UsuarioModel>> BuscarPorId(int id)
         {
             var usuario = await _usuarioRepositorio.BuscarPorId(id);
             return Ok(usuario);
@@ -67,5 +56,15 @@ namespace GameArchive.Controllers
             return Ok(apagado);
         }
 
+        //[HttpGet]
+        //public async Task<int> Logar([FromBody] UsuarioModel usuarioModel)
+        //{
+        //    var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
+
+        //    if (usuarioId > 0)
+        //        return Ok(usuarioId);
+
+        //    throw new Exception("Usuário ou senha incorretos.");
+        //}
     }
 }

@@ -20,6 +20,9 @@ namespace GameArchive.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //Montar uma query na mão
+            //modelBuilder.Entity<PlataformaUsuarioModel>(x => x.ToSqlQuery(""));
         }
     }
 }
