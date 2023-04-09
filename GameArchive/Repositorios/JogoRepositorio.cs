@@ -1,32 +1,75 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Data;
+using GameArchive.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameArchive.Repositorios.Interfaces
 {
     public class JogoRepositorio : IJogoRepositorio
     {
-        public Task<JogoModel> Adicionar(JogoModel jogo)
+        private readonly GameArchiveDbContext _dbContext;
+
+        public JogoRepositorio(GameArchiveDbContext gamerArchiveDbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = gamerArchiveDbContext;
         }
 
-        public Task<bool> Apagar(int id)
+        public async Task<JogoModel> Adicionar(JogoModel jogo)
         {
-            throw new NotImplementedException();
+            await _dbContext.Jogos.AddAsync(jogo);
+            await _dbContext.SaveChangesAsync();
+
+            return jogo;
         }
 
-        public Task<JogoModel> Atualizar(JogoModel jogo, int id)
+        public async Task<bool> Apagar(int id)
         {
-            throw new NotImplementedException();
+            var jogoPorId = await BuscarPorId(id);
+
+            if (jogoPorId == null)
+            {
+                throw new Exception($"Jogo com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            _dbContext.Jogos.Remove(jogoPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<JogoModel> BuscarPorId(int id)
+        public async Task<JogoModel> Atualizar(JogoModel jogo, int id)
         {
-            throw new NotImplementedException();
+            var jogosPorId = await BuscarPorId(id);
+
+            if (jogosPorId == null)
+            {
+                throw new Exception($"Jogo com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            jogosPorId.Nome = jogo.Nome;
+            jogosPorId.PlataformaId = jogo.PlataformaId;
+            jogosPorId.DesenvolvedoraId = jogo.DesenvolvedoraId;
+            jogosPorId.GeneroId = jogo.GeneroId;
+            jogosPorId.FaixaEtaria = jogo.FaixaEtaria;
+
+            _dbContext.Jogos.Update(jogosPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return jogosPorId;
         }
 
-        public Task<List<JogoModel>> BuscarTodos()
+        public async Task<JogoModel> BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            var jogo = await _dbContext.Jogos.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (jogo == null)
+                throw new Exception($"Jogo com ID: {id} não foi encontrado no banco de dados.");
+
+            return jogo;
+        }
+
+        public async Task<List<JogoModel>> BuscarTodos()
+        {
+            return await _dbContext.Jogos.ToListAsync();
         }
     }
 }

@@ -1,32 +1,78 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Data;
+using GameArchive.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameArchive.Repositorios.Interfaces
 {
     public class UsuarioJogoRepositorio : IUsuarioJogoRepositorio
     {
-        public Task<UsuarioJogoModel> Adicionar(UsuarioJogoModel usuarioJogo)
+        private readonly GameArchiveDbContext _dbContext;
+
+        public UsuarioJogoRepositorio(GameArchiveDbContext gamerArchiveDbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = gamerArchiveDbContext;
         }
 
-        public Task<bool> Apagar(int id)
+        public async Task<UsuarioJogoModel> Adicionar(UsuarioJogoModel usuarioJogo)
         {
-            throw new NotImplementedException();
+            await _dbContext.UsuariosJogos.AddAsync(usuarioJogo);
+            await _dbContext.SaveChangesAsync();
+
+            return usuarioJogo;
         }
 
-        public Task<UsuarioJogoModel> Atualizar(UsuarioJogoModel usuarioJogo, int id)
+        public async Task<bool> Apagar(int id)
         {
-            throw new NotImplementedException();
+            var usuarioJogoPorId = await BuscarPorId(id);
+
+            if (usuarioJogoPorId == null)
+            {
+                throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            _dbContext.UsuariosJogos.Remove(usuarioJogoPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<UsuarioJogoModel> BuscarPorId(int id)
+        public async Task<UsuarioJogoModel> Atualizar(UsuarioJogoModel usuarioJogo, int id)
         {
-            throw new NotImplementedException();
+            var usuarioJogoPorId = await BuscarPorId(id);
+
+            if (usuarioJogoPorId == null)
+            {
+                throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            usuarioJogoPorId.EhMidiaFisica = usuarioJogo.EhMidiaFisica;
+            usuarioJogoPorId.UsuarioId = usuarioJogo.UsuarioId;
+            usuarioJogoPorId.JogoId = usuarioJogo.JogoId;
+            usuarioJogoPorId.DataAquisicao = usuarioJogo.DataAquisicao;
+            usuarioJogoPorId.Descricao = usuarioJogo.Descricao;
+            usuarioJogoPorId.JaZerado = usuarioJogo.JaZerado;
+            usuarioJogoPorId.Nota = usuarioJogo.Nota;
+            usuarioJogoPorId.PrecoPago = usuarioJogo.PrecoPago;
+
+            _dbContext.UsuariosJogos.Update(usuarioJogoPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return usuarioJogoPorId;
         }
 
-        public Task<List<UsuarioJogoModel>> BuscarTodos()
+        public async Task<UsuarioJogoModel> BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            var usuarioJogo = await _dbContext.UsuariosJogos.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (usuarioJogo == null)
+                throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
+
+            return usuarioJogo;
+        }
+
+        public async Task<List<UsuarioJogoModel>> BuscarTodos()
+        {
+            return await _dbContext.UsuariosJogos.ToListAsync();
         }
     }
 }

@@ -1,32 +1,71 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Data;
+using GameArchive.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameArchive.Repositorios.Interfaces
 {
     public class GeneroRepositorio : IGeneroRepositorio
     {
-        public Task<Models.GeneroModel> Adicionar(Models.GeneroModel genero)
+        private readonly GameArchiveDbContext _dbContext;
+
+        public GeneroRepositorio(GameArchiveDbContext gamerArchiveDbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = gamerArchiveDbContext;
         }
 
-        public Task<bool> Apagar(int id)
+        public async Task<GeneroModel> Adicionar(GeneroModel genero)
         {
-            throw new NotImplementedException();
+            await _dbContext.Generos.AddAsync(genero);
+            await _dbContext.SaveChangesAsync();
+
+            return genero;
         }
 
-        public Task<Models.GeneroModel> Atualizar(Models.GeneroModel genero, int id)
+        public async Task<bool> Apagar(int id)
         {
-            throw new NotImplementedException();
+            var generoId = await BuscarPorId(id);
+
+            if (generoId == null)
+            {
+                throw new Exception($"Gênero com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            _dbContext.Generos.Remove(generoId);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<Models.GeneroModel> BuscarPorId(int id)
+        public async Task<GeneroModel> Atualizar(GeneroModel genero, int id)
         {
-            throw new NotImplementedException();
+            var generoPorId = await BuscarPorId(id);
+
+            if (generoPorId == null)
+            {
+                throw new Exception($"Gênero com ID: {id} não foi encontrado no banco de dados.");
+            }
+
+            generoPorId.Nome = genero.Nome;
+
+            _dbContext.Generos.Update(generoPorId);
+            await _dbContext.SaveChangesAsync();
+
+            return generoPorId;
         }
 
-        public Task<List<Models.GeneroModel>> BuscarTodos()
+        public async Task<GeneroModel> BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            var genero = await _dbContext.Generos.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (genero == null)
+                throw new Exception($"Gênero com ID: {id} não foi encontrado no banco de dados.");
+
+            return genero;
+        }
+
+        public async Task<List<GeneroModel>> BuscarTodos()
+        {
+            return await _dbContext.Generos.ToListAsync();
         }
     }
 }

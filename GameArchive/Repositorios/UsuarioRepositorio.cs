@@ -8,9 +8,9 @@ namespace GameArchive.Repositorios.Interfaces
     {
         private readonly GameArchiveDbContext _dbContext;
 
-        public UsuarioRepositorio(GameArchiveDbContext GamerArchiveDbContext)
+        public UsuarioRepositorio(GameArchiveDbContext gamerArchiveDbContext)
         {
-            _dbContext = GamerArchiveDbContext;
+            _dbContext = gamerArchiveDbContext;
         }
 
         public async Task<List<UsuarioModel>> BuscarTodos()
@@ -20,7 +20,12 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<UsuarioModel> BuscarPorId(int id)
         {
-            return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (usuario == null)
+                throw new Exception($"Usuário com ID: {id} não foi encontrado no banco de dados.");
+
+            return usuario;
         }
 
         public async Task<UsuarioModel> Adicionar(UsuarioModel usuario)

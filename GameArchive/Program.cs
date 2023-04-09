@@ -19,8 +19,7 @@ namespace GameArchive
             builder.Services.AddSwaggerGen();
 
             //Configuração do entity framework
-            builder.Services.AddEntityFrameworkSqlServer()
-                .AddDbContext<GameArchiveDbContext>(
+            builder.Services.AddEntityFrameworkSqlServer().AddDbContext<GameArchiveDbContext>(
                     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
                 );
 
