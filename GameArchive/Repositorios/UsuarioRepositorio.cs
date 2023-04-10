@@ -84,7 +84,7 @@ namespace GameArchive.Repositorios.Interfaces
             IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
             usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
 
-            var usuarioRetornado =  await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuario.Email && x.Senha == usuario.Senha);
+            var usuarioRetornado = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuario.Email && x.Senha == usuario.Senha);
 
             if (usuarioRetornado == null)
             {

@@ -24,7 +24,7 @@ namespace GameArchive.Controllers
             return Ok(plataformasUsuarios);
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodosPorUsuario/{usuarioId}")]
         public async Task<ActionResult<List<PlataformaUsuarioModel>>> BuscarTodosPorUsuario(int usuarioId)
         {
             var plataformasUsuarios = await _plataformaUsuarioRepositorio.BuscarTodosPorUsuario(usuarioId);
