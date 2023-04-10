@@ -1,4 +1,5 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Data.Map;
+using GameArchive.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameArchive.Data
@@ -19,10 +20,18 @@ namespace GameArchive.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new UsuarioMap());
+            modelBuilder.ApplyConfiguration(new PlataformaMap());
+            modelBuilder.ApplyConfiguration(new DesenvolvedoraMap());
+            modelBuilder.ApplyConfiguration(new GeneroMap());
+            modelBuilder.ApplyConfiguration(new JogoMap());
+            modelBuilder.ApplyConfiguration(new UsuarioJogoMap());
+            modelBuilder.ApplyConfiguration(new PlataformaUsuarioMap());
 
             //Montar uma query na mão
             //modelBuilder.Entity<PlataformaUsuarioModel>(x => x.ToSqlQuery(""));
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

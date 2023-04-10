@@ -1,7 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace GameArchive.DataContracts
 {
+    [ComVisible(true)]
     [DataContract]
     public class FaixaEtariaDataContract
     {
