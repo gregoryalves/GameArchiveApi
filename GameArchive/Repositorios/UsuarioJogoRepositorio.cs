@@ -1,4 +1,6 @@
-﻿using GameArchive.Data;
+﻿using GameArchive.Business;
+using GameArchive.Business.Interfaces;
+using GameArchive.Data;
 using GameArchive.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +17,17 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<UsuarioJogoModel> Adicionar(UsuarioJogoModel usuarioJogo)
         {
+            IUsuarioJogoBusiness faixaEtariaBusiness = new UsuarioJogoBusiness();
+            var faixaEtaria = faixaEtariaBusiness.ValidarFaixaEtaria(usuarioJogo);            
+
+            if (!faixaEtaria.PossuiIdadeMinimaParaJogar)
+                throw new Exception($"Este jogo não é aconselhável, pois você possui {faixaEtaria.Idade} anos e a faixa etária dele é de {faixaEtaria.FaixaEtaria} anos");
+
             await _dbContext.UsuariosJogos.AddAsync(usuarioJogo);
             await _dbContext.SaveChangesAsync();
 
             return usuarioJogo;
-        }
+        }        
 
         public async Task<bool> Apagar(int id)
         {
@@ -62,7 +70,8 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<UsuarioJogoModel> BuscarPorId(int id)
         {
-            var usuarioJogo = await _dbContext.UsuariosJogos.FirstOrDefaultAsync(x => x.Id == id);
+            var usuarioJogo = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
+                                                            .Include(x => x.Usuario).FirstOrDefaultAsync(x => x.Id == id);
 
             if (usuarioJogo == null)
                 throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
@@ -72,7 +81,15 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<List<UsuarioJogoModel>> BuscarTodos()
         {
-            return await _dbContext.UsuariosJogos.ToListAsync();
+            return await _dbContext.UsuariosJogos.Include(x => x.Jogo)
+                                                 .Include(x => x.Usuario).ToListAsync();
         }
+
+        public async Task<List<UsuarioJogoModel>> BuscarTodosPorUsuario(int usuarioId)
+        {
+            return await _dbContext.UsuariosJogos.Where(x => x.UsuarioId == usuarioId)
+                                                       .Include(x => x.Jogo)
+                                                       .Include(x => x.Usuario).ToListAsync();
+        }        
     }
 }

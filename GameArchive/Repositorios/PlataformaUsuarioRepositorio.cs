@@ -58,7 +58,8 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<PlataformaUsuarioModel> BuscarPorId(int id)
         {
-            var plataformaUsuario = await _dbContext.PlataformasUsuarios.FirstOrDefaultAsync(x => x.Id == id);
+            var plataformaUsuario = await _dbContext.PlataformasUsuarios.Include(x => x.Usuario)
+                                                                        .Include(x => x.Plataforma).FirstOrDefaultAsync(x => x.Id == id);
 
             if (plataformaUsuario == null)
                 throw new Exception($"Plataforma do usuário com ID: {id} não foi encontrado no banco de dados.");
@@ -68,7 +69,15 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<List<PlataformaUsuarioModel>> BuscarTodos()
         {
-            return await _dbContext.PlataformasUsuarios.ToListAsync();
+            return await _dbContext.PlataformasUsuarios.Include(x => x.Usuario)
+                                                       .Include(x => x.Plataforma).ToListAsync();
+        }
+
+        public async Task<List<PlataformaUsuarioModel>> BuscarTodosPorUsuario(int usuarioId)
+        {
+            return await _dbContext.PlataformasUsuarios.Where(x => x.UsuarioId == usuarioId)
+                                                       .Include(x => x.Usuario)
+                                                       .Include(x => x.Plataforma).ToListAsync();
         }
     }
 }

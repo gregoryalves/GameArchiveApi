@@ -16,7 +16,7 @@ namespace GameArchive.Controllers
         {
             _usuarioRepositorio = usuarioRepositorio;
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<List<UsuarioModel>>> BuscarTodos()
         {
@@ -56,15 +56,12 @@ namespace GameArchive.Controllers
             return Ok(apagado);
         }
 
-        //[HttpGet]
-        //public async Task<int> Logar([FromBody] UsuarioModel usuarioModel)
-        //{
-        //    var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
+        [HttpGet]
+        public async Task<ActionResult<int>> Logar([FromBody] UsuarioModel usuarioModel)
+        {
+            var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
 
-        //    if (usuarioId > 0)
-        //        return Ok(usuarioId);
-
-        //    throw new Exception("Usuário ou senha incorretos.");
-        //}
+            return Ok(usuarioId);
+        }
     }
 }

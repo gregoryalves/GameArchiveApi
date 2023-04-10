@@ -69,9 +69,16 @@ namespace GameArchive.Repositorios.Interfaces
             return true;
         }
 
-        public Task<long> Logar(UsuarioModel usuario)
+        public async Task<int> Logar(UsuarioModel usuario)
         {
-            throw new NotImplementedException();
+            var usuarioRetornado =  await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuario.Email && x.Senha == usuario.Senha);
+
+            if (usuarioRetornado == null)
+            {
+                throw new Exception($"E-mail ou senha inválidos.");
+            }
+
+            return usuarioRetornado.Id;
         }
     }
 }
