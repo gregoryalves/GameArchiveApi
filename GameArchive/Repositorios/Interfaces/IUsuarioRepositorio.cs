@@ -9,6 +9,6 @@ namespace GameArchive.Repositorios.Interfaces
         Task<UsuarioModel> Adicionar(UsuarioModel usuario);
         Task<UsuarioModel> Atualizar(UsuarioModel usuario, int id);
         Task<bool> Apagar(int id);
-        Task<long> Logar(UsuarioModel usuario);
+        Task<int> Logar(UsuarioModel usuario);
     }
 }
