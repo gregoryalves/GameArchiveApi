@@ -5,6 +5,6 @@ namespace GameArchive.Business.Interfaces
 {
     public interface IUsuarioJogoBusiness
     {
-        FaixaEtariaDataContract ValidarFaixaEtaria(UsuarioJogoModel usuarioJogo);
+        FaixaEtariaDataContract ValidarFaixaEtaria(UsuarioModel usuario, JogoModel jogo);
     }
 }

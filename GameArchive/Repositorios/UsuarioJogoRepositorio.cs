@@ -18,7 +18,10 @@ namespace GameArchive.Repositorios.Interfaces
         public async Task<UsuarioJogoModel> Adicionar(UsuarioJogoModel usuarioJogo)
         {
             IUsuarioJogoBusiness faixaEtariaBusiness = new UsuarioJogoBusiness();
-            var faixaEtaria = faixaEtariaBusiness.ValidarFaixaEtaria(usuarioJogo);            
+            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == usuarioJogo.UsuarioId);
+            var jogo = await _dbContext.Jogos.FirstOrDefaultAsync(x => x.Id == usuarioJogo.JogoId);
+
+            var faixaEtaria = faixaEtariaBusiness.ValidarFaixaEtaria(usuario, jogo);            
 
             if (!faixaEtaria.PossuiIdadeMinimaParaJogar)
                 throw new Exception($"Este jogo não é aconselhável, pois você possui {faixaEtaria.Idade} anos e a faixa etária dele é de {faixaEtaria.FaixaEtaria} anos");
@@ -52,6 +55,15 @@ namespace GameArchive.Repositorios.Interfaces
             {
                 throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
             }
+
+            IUsuarioJogoBusiness faixaEtariaBusiness = new UsuarioJogoBusiness();
+            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == usuarioJogo.UsuarioId);
+            var jogo = await _dbContext.Jogos.FirstOrDefaultAsync(x => x.Id == usuarioJogo.JogoId);
+
+            var faixaEtaria = faixaEtariaBusiness.ValidarFaixaEtaria(usuario, jogo);
+
+            if (!faixaEtaria.PossuiIdadeMinimaParaJogar)
+                throw new Exception($"Este jogo não é aconselhável, pois você possui {faixaEtaria.Idade} anos e a faixa etária dele é de {faixaEtaria.FaixaEtaria} anos");
 
             usuarioJogoPorId.EhMidiaFisica = usuarioJogo.EhMidiaFisica;
             usuarioJogoPorId.UsuarioId = usuarioJogo.UsuarioId;

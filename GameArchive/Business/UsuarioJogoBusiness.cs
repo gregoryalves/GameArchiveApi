@@ -6,13 +6,13 @@ namespace GameArchive.Business
 {
     public class UsuarioJogoBusiness : IUsuarioJogoBusiness
     {
-        public FaixaEtariaDataContract ValidarFaixaEtaria(UsuarioJogoModel usuarioJogo)
+        public FaixaEtariaDataContract ValidarFaixaEtaria(UsuarioModel usuario, JogoModel jogo)
         {
-            var dataNascimento = usuarioJogo.Usuario.DataNascimento;
+            var dataNascimento = usuario.DataNascimento;
             var dataAtual = DateTime.Today;
 
             var idade = RetornarIdade(dataNascimento, dataAtual);
-            var faixaEtariaDoJogo = usuarioJogo.Jogo.FaixaEtaria;
+            var faixaEtariaDoJogo = jogo.FaixaEtaria;
 
             var faixaEtaria = new FaixaEtariaDataContract()
             {
