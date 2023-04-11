@@ -4,7 +4,7 @@ namespace GameArchive.Repositorios.Interfaces
 {
     public interface IJogoRepositorio
     {
-        Task<List<JogoModel>> BuscarTodos();
+        Task<IEnumerable<JogoModel>> BuscarTodos();
         Task<JogoModel> BuscarPorId(int id);
         Task<JogoModel> Adicionar(JogoModel jogo);
         Task<JogoModel> Atualizar(JogoModel jogo, int id);

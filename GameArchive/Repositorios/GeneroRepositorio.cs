@@ -63,7 +63,7 @@ namespace GameArchive.Repositorios.Interfaces
             return genero;
         }
 
-        public async Task<List<GeneroModel>> BuscarTodos()
+        public async Task<IEnumerable<GeneroModel>> BuscarTodos()
         {
             return await _dbContext.Generos.ToListAsync();
         }

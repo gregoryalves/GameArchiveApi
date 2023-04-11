@@ -63,7 +63,7 @@ namespace GameArchive.Repositorios.Interfaces
             return desenvolvedora;
         }
 
-        public async Task<List<DesenvolvedoraModel>> BuscarTodas()
+        public async Task<IEnumerable<DesenvolvedoraModel>> BuscarTodas()
         {
             return await _dbContext.Desenvolvedoras.ToListAsync();
         }

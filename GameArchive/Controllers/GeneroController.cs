@@ -17,7 +17,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GeneroModel>>> BuscarTodos()
+        public async Task<ActionResult<IEnumerable<GeneroModel>>> BuscarTodos()
         {
             var generos = await _generoRepositorio.BuscarTodos();
 

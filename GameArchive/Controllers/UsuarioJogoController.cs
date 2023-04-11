@@ -17,7 +17,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<UsuarioJogoModel>>> BuscarTodos()
+        public async Task<ActionResult<IEnumerable<UsuarioJogoModel>>> BuscarTodos()
         {
             var usuariosJogos = await _usuarioJogoRepositorio.BuscarTodos();
 
@@ -25,7 +25,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet("BuscarTodosPorUsuario/{usuarioId}")]
-        public async Task<ActionResult<List<UsuarioJogoModel>>> BuscarTodosPorUsuario(int usuarioId)
+        public async Task<ActionResult<IEnumerable<UsuarioJogoModel>>> BuscarTodosPorUsuario(int usuarioId)
         {
             var usuariosJogos = await _usuarioJogoRepositorio.BuscarTodosPorUsuario(usuarioId);
 

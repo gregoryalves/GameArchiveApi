@@ -63,7 +63,7 @@ namespace GameArchive.Repositorios.Interfaces
             return plataforma;
         }
 
-        public async Task<List<PlataformaModel>> BuscarTodas()
+        public async Task<IEnumerable<PlataformaModel>> BuscarTodas()
         {
             return await _dbContext.Plataformas.ToListAsync();
         }

@@ -67,7 +67,7 @@ namespace GameArchive.Repositorios.Interfaces
             return jogo;
         }
 
-        public async Task<List<JogoModel>> BuscarTodos()
+        public async Task<IEnumerable<JogoModel>> BuscarTodos()
         {
             return await _dbContext.Jogos.ToListAsync();
         }

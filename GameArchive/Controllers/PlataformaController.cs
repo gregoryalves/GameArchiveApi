@@ -17,7 +17,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<PlataformaModel>>> BuscarTodos()
+        public async Task<ActionResult<IEnumerable<PlataformaModel>>> BuscarTodos()
         {
             var plataformas = await _plataformaRepositorio.BuscarTodas();
 

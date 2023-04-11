@@ -79,13 +79,13 @@ namespace GameArchive.Repositorios.Interfaces
             return usuarioJogo;
         }
 
-        public async Task<List<UsuarioJogoModel>> BuscarTodos()
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarTodos()
         {
             return await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                  .Include(x => x.Usuario).ToListAsync();
         }
 
-        public async Task<List<UsuarioJogoModel>> BuscarTodosPorUsuario(int usuarioId)
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarTodosPorUsuario(int usuarioId)
         {
             return await _dbContext.UsuariosJogos.Where(x => x.UsuarioId == usuarioId)
                                                        .Include(x => x.Jogo)

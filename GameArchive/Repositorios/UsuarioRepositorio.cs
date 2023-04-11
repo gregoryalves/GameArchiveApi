@@ -15,7 +15,7 @@ namespace GameArchive.Repositorios.Interfaces
             _dbContext = gamerArchiveDbContext;
         }
 
-        public async Task<List<UsuarioModel>> BuscarTodos()
+        public async Task<IEnumerable<UsuarioModel>> BuscarTodos()
         {
             return await _dbContext.Usuarios.ToListAsync();
         }

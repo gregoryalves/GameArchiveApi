@@ -17,7 +17,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<DesenvolvedoraModel>>> BuscarTodas()
+        public async Task<ActionResult<IEnumerable<DesenvolvedoraModel>>> BuscarTodas()
         {
             var desenvolvedoras = await _desenvolvedoraRepositorio.BuscarTodas();
 
