@@ -82,26 +82,59 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<UsuarioJogoModel> BuscarPorId(int id)
         {
+
             var usuarioJogo = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
-                                                            .Include(x => x.Usuario).FirstOrDefaultAsync(x => x.Id == id);
+                                                            .Include(x => x.Usuario).FirstOrDefaultAsync(x => x.Id == id);            
 
             if (usuarioJogo == null)
                 throw new Exception($"Jogo do usuário com ID: {id} não foi encontrado no banco de dados.");
+
+            PreencheJoinsDaEntidade(usuarioJogo);
 
             return usuarioJogo;
         }
 
         public async Task<IEnumerable<UsuarioJogoModel>> BuscarTodos()
         {
-            return await _dbContext.UsuariosJogos.Include(x => x.Jogo)
+            var usuariosJogosRetorno = new List<UsuarioJogoModel>();
+
+            var usuariosJogos = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                  .Include(x => x.Usuario).ToListAsync();
+
+            foreach(var usuarioJogo in usuariosJogos)
+            {
+                PreencheJoinsDaEntidade(usuarioJogo);
+                usuariosJogosRetorno.Add(usuarioJogo);
+            }
+
+            return usuariosJogosRetorno;
         }
 
         public async Task<IEnumerable<UsuarioJogoModel>> BuscarTodosPorUsuario(int usuarioId)
         {
-            return await _dbContext.UsuariosJogos.Where(x => x.UsuarioId == usuarioId)
+            var usuariosJogosRetorno = new List<UsuarioJogoModel>();
+
+            var usuariosJogos = await _dbContext.UsuariosJogos.Where(x => x.UsuarioId == usuarioId)
                                                        .Include(x => x.Jogo)
                                                        .Include(x => x.Usuario).ToListAsync();
+
+            foreach (var usuarioJogo in usuariosJogos)
+            {
+                PreencheJoinsDaEntidade(usuarioJogo);
+                usuariosJogosRetorno.Add(usuarioJogo);
+            }
+
+            return usuariosJogosRetorno;
         }        
+
+        private async void PreencheJoinsDaEntidade(UsuarioJogoModel usuarioJogo)
+        {
+            var jogo = await _dbContext.Jogos.Include(x => x.Plataforma)
+                                             .Include(x => x.Desenvolvedora)
+                                             .Include(x => x.Genero).FirstOrDefaultAsync(x => x.Id == usuarioJogo.JogoId);
+
+            usuarioJogo.Jogo = jogo;
+            usuarioJogo.Usuario.Senha = string.Empty;
+        }
     }
 }

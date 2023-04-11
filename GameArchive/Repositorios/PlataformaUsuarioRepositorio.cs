@@ -64,20 +64,42 @@ namespace GameArchive.Repositorios.Interfaces
             if (plataformaUsuario == null)
                 throw new Exception($"Plataforma do usuário com ID: {id} não foi encontrado no banco de dados.");
 
+            plataformaUsuario.Usuario.Senha = string.Empty;
+
             return plataformaUsuario;
         }
 
         public async Task<IEnumerable<PlataformaUsuarioModel>> BuscarTodos()
         {
-            return await _dbContext.PlataformasUsuarios.Include(x => x.Usuario)
+            var plataformasUsuariosRetorno = new List<PlataformaUsuarioModel>();
+
+            var plataformasUsuarios = await _dbContext.PlataformasUsuarios.Include(x => x.Usuario)
                                                        .Include(x => x.Plataforma).ToListAsync();
+
+            foreach (var plataformaUsuario in plataformasUsuarios)
+            {
+                plataformaUsuario.Usuario.Senha = string.Empty;
+                plataformasUsuariosRetorno.Add(plataformaUsuario);
+            }
+
+            return plataformasUsuariosRetorno;
         }
 
         public async Task<IEnumerable<PlataformaUsuarioModel>> BuscarTodosPorUsuario(int usuarioId)
         {
-            return await _dbContext.PlataformasUsuarios.Where(x => x.UsuarioId == usuarioId)
+            var plataformasUsuariosRetorno = new List<PlataformaUsuarioModel>();
+
+            var plataformasUsuarios = await _dbContext.PlataformasUsuarios.Where(x => x.UsuarioId == usuarioId)
                                                        .Include(x => x.Usuario)
                                                        .Include(x => x.Plataforma).ToListAsync();
+
+            foreach(var plataformaUsuario in plataformasUsuarios)
+            {
+                plataformaUsuario.Usuario.Senha = string.Empty;
+                plataformasUsuariosRetorno.Add(plataformaUsuario);
+            }
+
+            return plataformasUsuariosRetorno;
         }
     }
 }
