@@ -57,7 +57,7 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet("Logar")]
-        public async Task<ActionResult<int>> Logar([FromBody] UsuarioModel usuarioModel)
+        public async Task<ActionResult<int>> Logar([FromQuery] UsuarioModel usuarioModel)
         {
             var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
 
