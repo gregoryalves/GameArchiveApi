@@ -59,7 +59,9 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<JogoModel> BuscarPorId(int id)
         {
-            var jogo = await _dbContext.Jogos.FirstOrDefaultAsync(x => x.Id == id);
+            var jogo = await _dbContext.Jogos.Include(x => x.Plataforma)
+                                             .Include(x => x.Desenvolvedora)
+                                             .Include(x => x.Genero).FirstOrDefaultAsync(x => x.Id == id);
 
             if (jogo == null)
                 throw new Exception($"Jogo com ID: {id} não foi encontrado no banco de dados.");
@@ -69,7 +71,9 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<IEnumerable<JogoModel>> BuscarTodos()
         {
-            return await _dbContext.Jogos.ToListAsync();
+            return await _dbContext.Jogos.Include(x => x.Plataforma)
+                                         .Include(x => x.Desenvolvedora)
+                                         .Include(x => x.Genero).ToListAsync();
         }
     }
 }
