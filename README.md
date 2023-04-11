@@ -1,7 +1,7 @@
 # GameArchiveApi
 Api para cadastro de catálogo de games.
 
-Esta api oferece um cadastro global dos seguintes itens:
+Esta api oferece um cadastro dos seguintes itens:
 
 - Plataformas - Consoles ou plataformas como PC
 - Desenvolvedoras - EA, Naugthy Dog etc
