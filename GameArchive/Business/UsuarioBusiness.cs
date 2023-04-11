@@ -1,4 +1,7 @@
 ﻿using GameArchive.Business.Interfaces;
+using GameArchive.Data;
+using GameArchive.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,6 +22,13 @@ namespace GameArchive.Business
             }
 
             return sBuilder.ToString();
+        }
+
+        public async Task<bool> ValidarEmailJaCadastrado(GameArchiveDbContext dbContext, UsuarioModel usuario)
+        {
+            var usuarioComEmailExistente = await dbContext.Usuarios.Where(x => x.Email == usuario.Email && x.Id != usuario.Id).FirstOrDefaultAsync();
+
+            return usuarioComEmailExistente != null;
         }
     }
 }

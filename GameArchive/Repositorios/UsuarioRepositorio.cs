@@ -33,6 +33,14 @@ namespace GameArchive.Repositorios.Interfaces
         public async Task<UsuarioModel> Adicionar(UsuarioModel usuario)
         {
             IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+
+            var jaPossuiEmailNaBase = await usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
+
+            if (jaPossuiEmailNaBase)
+            {
+                throw new Exception($"O E-mail informado já está cadastrado.");
+            }
+
             usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
 
             await _dbContext.Usuarios.AddAsync(usuario);
@@ -51,6 +59,14 @@ namespace GameArchive.Repositorios.Interfaces
             }
 
             IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+
+            var jaPossuiEmailNaBase = await usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
+
+            if (jaPossuiEmailNaBase)
+            {
+                throw new Exception($"O E-mail informado já está cadastrado.");
+            }
+
             usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
 
             usuarioPorId.Nome = usuario.Nome;
