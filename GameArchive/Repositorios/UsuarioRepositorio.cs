@@ -17,7 +17,17 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<IEnumerable<UsuarioModel>> BuscarTodos()
         {
-            return await _dbContext.Usuarios.ToListAsync();
+            var usuariosRetorno = new List<UsuarioModel>();
+
+            var usuarios = await _dbContext.Usuarios.ToListAsync();
+
+            foreach (var usuario in usuarios)
+            {
+                usuario.Senha = string.Empty;
+                usuariosRetorno.Add(usuario);
+            }
+
+            return usuariosRetorno;
         }
 
         public async Task<UsuarioModel> BuscarPorId(int id)
@@ -26,6 +36,8 @@ namespace GameArchive.Repositorios.Interfaces
 
             if (usuario == null)
                 throw new Exception($"Usuário com ID: {id} não foi encontrado no banco de dados.");
+
+            usuario.Senha = string.Empty;
 
             return usuario;
         }
