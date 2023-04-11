@@ -28,6 +28,14 @@ namespace GameArchive.Data
             modelBuilder.ApplyConfiguration(new UsuarioJogoMap());
             modelBuilder.ApplyConfiguration(new PlataformaUsuarioMap());
 
+            //Remover o cascadeDelete
+            var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+                                               .SelectMany(x => x.GetForeignKeys())
+                                               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            foreach (var fk in cascadeFKs)
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+
             //Montar uma query na mão
             //modelBuilder.Entity<PlataformaUsuarioModel>(x => x.ToSqlQuery(""));
 
