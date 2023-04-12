@@ -31,6 +31,34 @@ namespace GameArchive.Controllers
             return Ok(jogo);
         }
 
+        [HttpGet("BuscarNome/{nome}")]
+        public async Task<ActionResult<JogoModel>> BuscarNome(string nome)
+        {
+            var jogos = await _jogoRepositorio.BuscarPorNome(nome);
+            return Ok(jogos);
+        }
+
+        [HttpGet("BuscarPorPlataforma/{nome}")]
+        public async Task<ActionResult<JogoModel>> BuscarPorPlataforma(string nome)
+        {
+            var jogos = await _jogoRepositorio.BuscarPorPlataforma(nome);
+            return Ok(jogos);
+        }
+
+        [HttpGet("BuscarPorDesenvolvedora/{nome}")]
+        public async Task<ActionResult<JogoModel>> BuscarPorDesenvolvedora(string nome)
+        {
+            var jogos = await _jogoRepositorio.BuscarPorDesenvolvedora(nome);
+            return Ok(jogos);
+        }
+
+        [HttpGet("BuscarPorGenero/{nome}")]
+        public async Task<ActionResult<JogoModel>> BuscarPorGenero(string nome)
+        {
+            var jogos = await _jogoRepositorio.BuscarPorGenero(nome);
+            return Ok(jogos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<JogoModel>> Cadastrar([FromBody] JogoModel jogoModel)
         {

@@ -6,6 +6,7 @@ namespace GameArchive.Repositorios.Interfaces
     {
         Task<IEnumerable<DesenvolvedoraModel>> BuscarTodas();
         Task<DesenvolvedoraModel> BuscarPorId(int id);
+        Task<IEnumerable<DesenvolvedoraModel>> BuscarPorNome(string nome);
         Task<DesenvolvedoraModel> Adicionar(DesenvolvedoraModel desenvolvedora);
         Task<DesenvolvedoraModel> Atualizar(DesenvolvedoraModel desenvolvedora, int id);
         Task<bool> Apagar(int id);

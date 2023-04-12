@@ -63,6 +63,11 @@ namespace GameArchive.Repositorios.Interfaces
             return plataforma;
         }
 
+        public async Task<IEnumerable<PlataformaModel>> BuscarPorNome(string nome)
+        {
+            return await _dbContext.Plataformas.Where(x => x.Nome.Contains(nome)).ToListAsync();
+        }
+
         public async Task<IEnumerable<PlataformaModel>> BuscarTodas()
         {
             return await _dbContext.Plataformas.ToListAsync();

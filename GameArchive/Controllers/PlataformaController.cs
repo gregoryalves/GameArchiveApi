@@ -31,6 +31,13 @@ namespace GameArchive.Controllers
             return Ok(plataforma);
         }
 
+        [HttpGet("BuscarNome/{nome}")]
+        public async Task<ActionResult<PlataformaModel>> BuscarNome(string nome)
+        {
+            var jogos = await _plataformaRepositorio.BuscarPorNome(nome);
+            return Ok(jogos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<PlataformaModel>> Cadastrar([FromBody] PlataformaModel plataformaModel)
         {

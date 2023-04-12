@@ -31,6 +31,13 @@ namespace GameArchive.Controllers
             return Ok(genero);
         }
 
+        [HttpGet("BuscarNome/{nome}")]
+        public async Task<ActionResult<GeneroModel>> BuscarNome(string nome)
+        {
+            var jogos = await _generoRepositorio.BuscarPorNome(nome);
+            return Ok(jogos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<GeneroModel>> Cadastrar([FromBody] GeneroModel generoModel)
         {
