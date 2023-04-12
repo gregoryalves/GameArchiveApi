@@ -1,4 +1,5 @@
-﻿using GameArchive.Business;
+﻿using GameArchive.Api.DataContracts;
+using GameArchive.Business;
 using GameArchive.Business.Interfaces;
 using GameArchive.Data;
 using GameArchive.Models;
@@ -107,12 +108,12 @@ namespace GameArchive.Repositorios.Interfaces
             return true;
         }
 
-        public async Task<int> Logar(UsuarioModel usuario)
+        public async Task<int> Logar(LoginDataContract usuarioLogin)
         {
             IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-            usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
+            usuarioLogin.Senha = usuarioBusiness.GerarHashMd5(usuarioLogin.Senha);
 
-            var usuarioRetornado = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuario.Email && x.Senha == usuario.Senha);
+            var usuarioRetornado = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuarioLogin.Email && x.Senha == usuarioLogin.Senha);
 
             if (usuarioRetornado == null)
             {
