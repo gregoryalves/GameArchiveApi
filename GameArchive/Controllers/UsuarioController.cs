@@ -18,7 +18,7 @@ namespace GameArchive.Controllers
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<UsuarioModel>>> BuscarTodos()
         {
             var usuarios = await _usuarioRepositorio.BuscarTodos();
@@ -26,14 +26,14 @@ namespace GameArchive.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<UsuarioModel>> BuscarPorId(int id)
         {
             var usuario = await _usuarioRepositorio.BuscarPorId(id);
             return Ok(usuario);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<UsuarioModel>> Cadastrar([FromBody] UsuarioModel usuarioModel)
         {
             var usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
@@ -41,7 +41,7 @@ namespace GameArchive.Controllers
             return Ok(usuario);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<UsuarioModel>> Atualizar([FromBody] UsuarioModel usuarioModel, int id)
         {
             usuarioModel.Id = id;
@@ -49,7 +49,7 @@ namespace GameArchive.Controllers
             return Ok(usuario);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<UsuarioModel>> Apagar(int id)
         {
             var apagado = await _usuarioRepositorio.Apagar(id);

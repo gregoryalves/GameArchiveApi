@@ -17,7 +17,7 @@ namespace GameArchive.Controllers
             _usuarioJogoRepositorio = usuarioJogoRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<UsuarioJogoModel>>> BuscarTodos()
         {
             var usuariosJogos = await _usuarioJogoRepositorio.BuscarTodos();
@@ -33,15 +33,15 @@ namespace GameArchive.Controllers
             return Ok(usuariosJogos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<UsuarioJogoModel>> BuscarPorId(int id)
         {
             var usuarioJogo = await _usuarioJogoRepositorio.BuscarPorId(id);
             return Ok(usuarioJogo);
         }
 
-        [HttpGet("BuscarNome")]
-        public async Task<ActionResult<JogoModel>> BuscarNome([FromQuery] UsuarioENomeDataContract usuarioNome)
+        [HttpGet("BuscarPorNome")]
+        public async Task<ActionResult<JogoModel>> BuscarPorNome([FromQuery] UsuarioENomeDataContract usuarioNome)
         {
             var jogos = await _usuarioJogoRepositorio.BuscarPorNome(usuarioNome);
             return Ok(jogos);
@@ -68,7 +68,7 @@ namespace GameArchive.Controllers
             return Ok(jogos);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<UsuarioJogoModel>> Cadastrar([FromBody] UsuarioJogoModel usuarioJogoModel)
         {
             var usuarioJogo = await _usuarioJogoRepositorio.Adicionar(usuarioJogoModel);
@@ -76,7 +76,7 @@ namespace GameArchive.Controllers
             return Ok(usuarioJogo);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<UsuarioJogoModel>> Atualizar([FromBody] UsuarioJogoModel usuarioJogoModel, int id)
         {
             usuarioJogoModel.Id = id;
@@ -84,7 +84,7 @@ namespace GameArchive.Controllers
             return Ok(usuarioJogo);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<UsuarioJogoModel>> Apagar(int id)
         {
             var apagado = await _usuarioJogoRepositorio.Apagar(id);
