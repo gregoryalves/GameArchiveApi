@@ -16,7 +16,7 @@ namespace GameArchive.Controllers
             _plataformaRepositorio = plataformaRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<PlataformaModel>>> BuscarTodos()
         {
             var plataformas = await _plataformaRepositorio.BuscarTodas();
@@ -24,21 +24,21 @@ namespace GameArchive.Controllers
             return Ok(plataformas);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<PlataformaModel>> BuscarPorId(int id)
         {
             var plataforma = await _plataformaRepositorio.BuscarPorId(id);
             return Ok(plataforma);
         }
 
-        [HttpGet("BuscarNome/{nome}")]
-        public async Task<ActionResult<PlataformaModel>> BuscarNome(string nome)
+        [HttpGet("BuscarPorNome/{nome}")]
+        public async Task<ActionResult<PlataformaModel>> BuscarPorNome(string nome)
         {
             var jogos = await _plataformaRepositorio.BuscarPorNome(nome);
             return Ok(jogos);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<PlataformaModel>> Cadastrar([FromBody] PlataformaModel plataformaModel)
         {
             var plataforma = await _plataformaRepositorio.Adicionar(plataformaModel);
@@ -46,7 +46,7 @@ namespace GameArchive.Controllers
             return Ok(plataforma);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<PlataformaModel>> Atualizar([FromBody] PlataformaModel plataformaModel, int id)
         {
             plataformaModel.Id = id;
@@ -54,7 +54,7 @@ namespace GameArchive.Controllers
             return Ok(plataforma);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<PlataformaModel>> Apagar(int id)
         {
             var apagada = await _plataformaRepositorio.Apagar(id);

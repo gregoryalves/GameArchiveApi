@@ -16,7 +16,7 @@ namespace GameArchive.Controllers
             _generoRepositorio = generoRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<GeneroModel>>> BuscarTodos()
         {
             var generos = await _generoRepositorio.BuscarTodos();
@@ -24,21 +24,21 @@ namespace GameArchive.Controllers
             return Ok(generos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<GeneroModel>> BuscarPorId(int id)
         {
             var genero = await _generoRepositorio.BuscarPorId(id);
             return Ok(genero);
         }
 
-        [HttpGet("BuscarNome/{nome}")]
-        public async Task<ActionResult<GeneroModel>> BuscarNome(string nome)
+        [HttpGet("BuscarPorNome/{nome}")]
+        public async Task<ActionResult<GeneroModel>> BuscarPorNome(string nome)
         {
             var jogos = await _generoRepositorio.BuscarPorNome(nome);
             return Ok(jogos);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<GeneroModel>> Cadastrar([FromBody] GeneroModel generoModel)
         {
             var genero = await _generoRepositorio.Adicionar(generoModel);
@@ -46,7 +46,7 @@ namespace GameArchive.Controllers
             return Ok(genero);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<GeneroModel>> Atualizar([FromBody] GeneroModel generoModel, int id)
         {
             generoModel.Id = id;
@@ -54,7 +54,7 @@ namespace GameArchive.Controllers
             return Ok(genero);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<GeneroModel>> Apagar(int id)
         {
             var apagado = await _generoRepositorio.Apagar(id);

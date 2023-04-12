@@ -95,7 +95,11 @@ namespace GameArchive.Repositorios.Interfaces
 
             foreach(var plataformaUsuario in plataformasUsuarios)
             {
-                plataformaUsuario.Usuario.Senha = string.Empty;
+                if (plataformaUsuario.Usuario != null)
+                {
+                    plataformaUsuario.Usuario.Senha = string.Empty;
+                }
+
                 plataformasUsuariosRetorno.Add(plataformaUsuario);
             }
 

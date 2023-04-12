@@ -16,7 +16,7 @@ namespace GameArchive.Controllers
             _jogoRepositorio = jogoRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<JogoModel>>> BuscarTodos()
         {
             var jogos = await _jogoRepositorio.BuscarTodos();
@@ -24,15 +24,15 @@ namespace GameArchive.Controllers
             return Ok(jogos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<JogoModel>> BuscarPorId(int id)
         {
             var jogo = await _jogoRepositorio.BuscarPorId(id);
             return Ok(jogo);
         }
 
-        [HttpGet("BuscarNome/{nome}")]
-        public async Task<ActionResult<JogoModel>> BuscarNome(string nome)
+        [HttpGet("BuscarPorNome/{nome}")]
+        public async Task<ActionResult<JogoModel>> BuscarPorNome(string nome)
         {
             var jogos = await _jogoRepositorio.BuscarPorNome(nome);
             return Ok(jogos);
@@ -59,7 +59,7 @@ namespace GameArchive.Controllers
             return Ok(jogos);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<JogoModel>> Cadastrar([FromBody] JogoModel jogoModel)
         {
             var jogo = await _jogoRepositorio.Adicionar(jogoModel);
@@ -67,7 +67,7 @@ namespace GameArchive.Controllers
             return Ok(jogo);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<JogoModel>> Atualizar([FromBody] JogoModel jogoModel, int id)
         {
             jogoModel.Id = id;
@@ -75,7 +75,7 @@ namespace GameArchive.Controllers
             return Ok(jogo);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<JogoModel>> Apagar(int id)
         {
             var apagado = await _jogoRepositorio.Apagar(id);

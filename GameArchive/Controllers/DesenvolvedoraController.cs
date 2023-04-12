@@ -16,7 +16,7 @@ namespace GameArchive.Controllers
             _desenvolvedoraRepositorio = desenvolvedoraCRepositorio;
         }
 
-        [HttpGet]
+        [HttpGet("BuscarTodas")]
         public async Task<ActionResult<IEnumerable<DesenvolvedoraModel>>> BuscarTodas()
         {
             var desenvolvedoras = await _desenvolvedoraRepositorio.BuscarTodas();
@@ -24,21 +24,21 @@ namespace GameArchive.Controllers
             return Ok(desenvolvedoras);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<DesenvolvedoraModel>> BuscarPorId(int id)
         {
             var desenvolvedora = await _desenvolvedoraRepositorio.BuscarPorId(id);
             return Ok(desenvolvedora);
         }
 
-        [HttpGet("BuscarNome/{nome}")]
-        public async Task<ActionResult<DesenvolvedoraModel>> BuscarNome(string nome)
+        [HttpGet("BuscarPorNome/{nome}")]
+        public async Task<ActionResult<DesenvolvedoraModel>> BuscarPorNome(string nome)
         {
             var jogos = await _desenvolvedoraRepositorio.BuscarPorNome(nome);
             return Ok(jogos);
         }
 
-        [HttpPost]
+        [HttpPost("Cadastrar")]
         public async Task<ActionResult<DesenvolvedoraModel>> Cadastrar([FromBody] DesenvolvedoraModel desenvolvedoraModel)
         {
             var desenvolvedora = await _desenvolvedoraRepositorio.Adicionar(desenvolvedoraModel);
@@ -46,7 +46,7 @@ namespace GameArchive.Controllers
             return Ok(desenvolvedora);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<DesenvolvedoraModel>> Atualizar([FromBody] DesenvolvedoraModel desenvolvedoraModel, int id)
         {
             desenvolvedoraModel.Id = id;
@@ -54,7 +54,7 @@ namespace GameArchive.Controllers
             return Ok(desenvolvedora);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<DesenvolvedoraModel>> Apagar(int id)
         {
             var apagada = await _desenvolvedoraRepositorio.Apagar(id);
