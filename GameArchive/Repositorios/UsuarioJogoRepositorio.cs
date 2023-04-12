@@ -1,8 +1,10 @@
-﻿using GameArchive.Business;
+﻿using GameArchive.Api.DataContracts;
+using GameArchive.Business;
 using GameArchive.Business.Interfaces;
 using GameArchive.Data;
 using GameArchive.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace GameArchive.Repositorios.Interfaces
 {
@@ -110,20 +112,20 @@ namespace GameArchive.Repositorios.Interfaces
             return usuariosJogosRetorno;
         }
 
-        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorNome(UsuarioJogoModel usuarioJogo, string nome)
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorNome(UsuarioENomeDataContract usuarioNome)
         {
             var usuariosJogosRetorno = new List<UsuarioJogoModel>();
 
             var jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
                                               .Include(x => x.Desenvolvedora)
                                               .Include(x => x.Genero)
-                                              .Where(x => x.Nome.Contains(nome)).ToListAsync();
+                                              .Where(x => x.Nome.Contains(usuarioNome.Nome)).ToListAsync();
 
             var jogosId = jogos.Select(x => x.Id).ToList();
 
             var usuarioJogosFiltrados = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                                       .Include(x => x.Usuario)
-                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioJogo.UsuarioId)
+                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioNome.UsuarioId)
                                                                       .ToListAsync();
 
             foreach (var usuarioJogoRetornado in usuarioJogosFiltrados)
@@ -135,11 +137,11 @@ namespace GameArchive.Repositorios.Interfaces
             return usuariosJogosRetorno;
         }
 
-        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorPlataforma(UsuarioJogoModel usuarioJogo, string nome)
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorPlataforma(UsuarioENomeDataContract usuarioNome)
         {
             var usuariosJogosRetorno = new List<UsuarioJogoModel>();
 
-            var plataformas = await _dbContext.Plataformas.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var plataformas = await _dbContext.Plataformas.Where(x => x.Nome.Contains(usuarioNome.Nome)).ToListAsync();
             var plataformasId = plataformas.Select(x => x.Id).ToList();
 
             var jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
@@ -151,7 +153,7 @@ namespace GameArchive.Repositorios.Interfaces
 
             var usuarioJogosFiltrados = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                                       .Include(x => x.Usuario)
-                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioJogo.UsuarioId)
+                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioNome.UsuarioId)
                                                                       .ToListAsync();
 
             foreach (var usuarioJogoRetornado in usuarioJogosFiltrados)
@@ -163,11 +165,11 @@ namespace GameArchive.Repositorios.Interfaces
             return usuariosJogosRetorno;
         }
 
-        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorDesenvolvedora(UsuarioJogoModel usuarioJogo, string nome)
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorDesenvolvedora(UsuarioENomeDataContract usuarioNome)
         {
             var usuariosJogosRetorno = new List<UsuarioJogoModel>();
 
-            var desenvolvedoras = await _dbContext.Plataformas.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var desenvolvedoras = await _dbContext.Plataformas.Where(x => x.Nome.Contains(usuarioNome.Nome)).ToListAsync();
             var desenvolvedorasId = desenvolvedoras.Select(x => x.Id).ToList();
 
             var jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
@@ -179,7 +181,7 @@ namespace GameArchive.Repositorios.Interfaces
 
             var usuarioJogosFiltrados = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                                       .Include(x => x.Usuario)
-                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioJogo.UsuarioId)
+                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioNome.UsuarioId)
                                                                       .ToListAsync();
 
             foreach (var usuarioJogoRetornado in usuarioJogosFiltrados)
@@ -191,11 +193,11 @@ namespace GameArchive.Repositorios.Interfaces
             return usuariosJogosRetorno;
         }
 
-        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorGenero(UsuarioJogoModel usuarioJogo, string nome)
+        public async Task<IEnumerable<UsuarioJogoModel>> BuscarPorGenero(UsuarioENomeDataContract usuarioNome)
         {
             var usuariosJogosRetorno = new List<UsuarioJogoModel>();
 
-            var genero = await _dbContext.Plataformas.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var genero = await _dbContext.Plataformas.Where(x => x.Nome.Contains(usuarioNome.Nome)).ToListAsync();
             var generoId = genero.Select(x => x.Id).ToList();
 
             var jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
@@ -207,7 +209,7 @@ namespace GameArchive.Repositorios.Interfaces
 
             var usuarioJogosFiltrados = await _dbContext.UsuariosJogos.Include(x => x.Jogo)
                                                                       .Include(x => x.Usuario)
-                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioJogo.UsuarioId)
+                                                                      .Where(x => jogosId.Contains(x.JogoId) && x.UsuarioId == usuarioNome.UsuarioId)
                                                                       .ToListAsync();
 
             foreach (var usuarioJogoRetornado in usuarioJogosFiltrados)

@@ -1,4 +1,5 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Api.DataContracts;
+using GameArchive.Models;
 using GameArchive.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,31 +40,31 @@ namespace GameArchive.Controllers
             return Ok(usuarioJogo);
         }
 
-        [HttpGet("BuscarNome/{nome}")]
-        public async Task<ActionResult<JogoModel>> BuscarNome([FromQuery] UsuarioJogoModel usuarioJogoModel, string nome)
+        [HttpGet("BuscarNome")]
+        public async Task<ActionResult<JogoModel>> BuscarNome([FromQuery] UsuarioENomeDataContract usuarioNome)
         {
-            var jogos = await _usuarioJogoRepositorio.BuscarPorNome(usuarioJogoModel,nome);
+            var jogos = await _usuarioJogoRepositorio.BuscarPorNome(usuarioNome);
             return Ok(jogos);
         }
 
-        [HttpGet("BuscarPorPlataforma/{nome}")]
-        public async Task<ActionResult<JogoModel>> BuscarPorPlataforma([FromQuery] UsuarioJogoModel usuarioJogoModel, string nome)
+        [HttpGet("BuscarPorPlataforma")]
+        public async Task<ActionResult<JogoModel>> BuscarPorPlataforma([FromQuery] UsuarioENomeDataContract usuarioNome)
         {
-            var jogos = await _usuarioJogoRepositorio.BuscarPorPlataforma(usuarioJogoModel, nome);
+            var jogos = await _usuarioJogoRepositorio.BuscarPorPlataforma(usuarioNome);
             return Ok(jogos);
         }
 
-        [HttpGet("BuscarPorDesenvolvedora/{nome}")]
-        public async Task<ActionResult<JogoModel>> BuscarPorDesenvolvedora([FromQuery] UsuarioJogoModel usuarioJogoModel, string nome)
+        [HttpGet("BuscarPorDesenvolvedora")]
+        public async Task<ActionResult<JogoModel>> BuscarPorDesenvolvedora([FromQuery] UsuarioENomeDataContract usuarioNome)
         {
-            var jogos = await _usuarioJogoRepositorio.BuscarPorDesenvolvedora(usuarioJogoModel, nome);
+            var jogos = await _usuarioJogoRepositorio.BuscarPorDesenvolvedora(usuarioNome);
             return Ok(jogos);
         }
 
-        [HttpGet("BuscarPorGenero/{nome}")]
-        public async Task<ActionResult<JogoModel>> BuscarPorGenero([FromQuery] UsuarioJogoModel usuarioJogoModel, string nome)
+        [HttpGet("BuscarPorGenero")]
+        public async Task<ActionResult<JogoModel>> BuscarPorGenero([FromQuery] UsuarioENomeDataContract usuarioNome)
         {
-            var jogos = await _usuarioJogoRepositorio.BuscarPorGenero(usuarioJogoModel, nome);
+            var jogos = await _usuarioJogoRepositorio.BuscarPorGenero(usuarioNome);
             return Ok(jogos);
         }
 

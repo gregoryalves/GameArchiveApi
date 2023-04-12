@@ -1,4 +1,5 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Api.DataContracts;
+using GameArchive.Models;
 using GameArchive.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -57,9 +58,9 @@ namespace GameArchive.Controllers
         }
 
         [HttpGet("Logar")]
-        public async Task<ActionResult<int>> Logar([FromQuery] UsuarioModel usuarioModel)
+        public async Task<ActionResult<int>> Logar([FromQuery] LoginDataContract usuarioLogin)
         {
-            var usuarioId = await _usuarioRepositorio.Logar(usuarioModel);
+            var usuarioId = await _usuarioRepositorio.Logar(usuarioLogin);
 
             return Ok(usuarioId);
         }

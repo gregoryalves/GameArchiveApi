@@ -1,4 +1,5 @@
-﻿using GameArchive.Models;
+﻿using GameArchive.Api.DataContracts;
+using GameArchive.Models;
 
 namespace GameArchive.Repositorios.Interfaces
 {
@@ -9,6 +10,6 @@ namespace GameArchive.Repositorios.Interfaces
         Task<UsuarioModel> Adicionar(UsuarioModel usuario);
         Task<UsuarioModel> Atualizar(UsuarioModel usuario, int id);
         Task<bool> Apagar(int id);
-        Task<int> Logar(UsuarioModel usuario);
+        Task<int> Logar(LoginDataContract usuarioLogin);
     }
 }
