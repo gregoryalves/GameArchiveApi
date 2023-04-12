@@ -6,6 +6,7 @@ namespace GameArchive.Repositorios.Interfaces
     {
         Task<IEnumerable<PlataformaModel>> BuscarTodas();
         Task<PlataformaModel> BuscarPorId(int id);
+        Task<IEnumerable<PlataformaModel>> BuscarPorNome(string nome);
         Task<PlataformaModel> Adicionar(PlataformaModel plataforma);
         Task<PlataformaModel> Atualizar(PlataformaModel plataforma, int id);
         Task<bool> Apagar(int id);

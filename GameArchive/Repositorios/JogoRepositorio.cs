@@ -69,6 +69,53 @@ namespace GameArchive.Repositorios.Interfaces
             return jogo;
         }
 
+        public async Task<IEnumerable<JogoModel>> BuscarPorNome(string nome)
+        {
+            return await _dbContext.Jogos.Include(x => x.Plataforma)
+                                              .Include(x => x.Desenvolvedora)
+                                              .Include(x => x.Genero)
+                                              .Where(x => x.Nome.Contains(nome)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<JogoModel>> BuscarPorPlataforma(string nome)
+        {
+            var plataformas = await _dbContext.Plataformas.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var plataformasId = plataformas.Select(x => x.Id).ToList();
+
+            var Jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
+                                              .Include(x => x.Desenvolvedora)
+                                              .Include(x => x.Genero)
+                                              .Where(x => plataformasId.Contains(x.PlataformaId)).ToListAsync();
+
+            return Jogos;
+        }
+
+        public async Task<IEnumerable<JogoModel>> BuscarPorDesenvolvedora(string nome)
+        {
+            var desenvolvedoras = await _dbContext.Desenvolvedoras.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var desenvolvedorasId = desenvolvedoras.Select(x => x.Id).ToList();
+
+            var Jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
+                                              .Include(x => x.Desenvolvedora)
+                                              .Include(x => x.Genero)
+                                              .Where(x => desenvolvedorasId.Contains(x.DesenvolvedoraId)).ToListAsync();
+
+            return Jogos;
+        }
+
+        public async Task<IEnumerable<JogoModel>> BuscarPorGenero(string nome)
+        {
+            var generos = await _dbContext.Generos.Where(x => x.Nome.Contains(nome)).ToListAsync();
+            var generosId = generos.Select(x => x.Id).ToList();
+
+            var Jogos = await _dbContext.Jogos.Include(x => x.Plataforma)
+                                              .Include(x => x.Desenvolvedora)
+                                              .Include(x => x.Genero)
+                                              .Where(x => generosId.Contains(x.GeneroId)).ToListAsync();
+
+            return Jogos;
+        }
+
         public async Task<IEnumerable<JogoModel>> BuscarTodos()
         {
             return await _dbContext.Jogos.Include(x => x.Plataforma)

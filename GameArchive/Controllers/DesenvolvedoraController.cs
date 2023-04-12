@@ -31,6 +31,13 @@ namespace GameArchive.Controllers
             return Ok(desenvolvedora);
         }
 
+        [HttpGet("BuscarNome/{nome}")]
+        public async Task<ActionResult<DesenvolvedoraModel>> BuscarNome(string nome)
+        {
+            var jogos = await _desenvolvedoraRepositorio.BuscarPorNome(nome);
+            return Ok(jogos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<DesenvolvedoraModel>> Cadastrar([FromBody] DesenvolvedoraModel desenvolvedoraModel)
         {

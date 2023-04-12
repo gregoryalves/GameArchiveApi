@@ -63,6 +63,11 @@ namespace GameArchive.Repositorios.Interfaces
             return desenvolvedora;
         }
 
+        public async Task<IEnumerable<DesenvolvedoraModel>> BuscarPorNome(string nome)
+        {
+            return await _dbContext.Desenvolvedoras.Where(x => x.Nome.Contains(nome)).ToListAsync();
+        }
+
         public async Task<IEnumerable<DesenvolvedoraModel>> BuscarTodas()
         {
             return await _dbContext.Desenvolvedoras.ToListAsync();
