@@ -19,68 +19,134 @@ namespace GameArchive.Controllers
         [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<JogoModel>>> BuscarTodos()
         {
-            var jogos = await _jogoRepositorio.BuscarTodos();
-
-            return Ok(jogos);
+            try
+            {
+                var jogos = await _jogoRepositorio.BuscarTodos();
+                return Ok(jogos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<JogoModel>> BuscarPorId(int id)
         {
-            var jogo = await _jogoRepositorio.BuscarPorId(id);
-            return Ok(jogo);
+            try
+            {
+                var jogo = await _jogoRepositorio.BuscarPorId(id);
+                return Ok(jogo);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorNome/{nome}")]
         public async Task<ActionResult<JogoModel>> BuscarPorNome(string nome)
         {
-            var jogos = await _jogoRepositorio.BuscarPorNome(nome);
-            return Ok(jogos);
+            try
+            {
+                var jogos = await _jogoRepositorio.BuscarPorNome(nome);
+                return Ok(jogos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorPlataforma/{nome}")]
         public async Task<ActionResult<JogoModel>> BuscarPorPlataforma(string nome)
         {
-            var jogos = await _jogoRepositorio.BuscarPorPlataforma(nome);
-            return Ok(jogos);
+            try
+            {
+                var jogos = await _jogoRepositorio.BuscarPorPlataforma(nome);
+                return Ok(jogos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorDesenvolvedora/{nome}")]
         public async Task<ActionResult<JogoModel>> BuscarPorDesenvolvedora(string nome)
         {
-            var jogos = await _jogoRepositorio.BuscarPorDesenvolvedora(nome);
-            return Ok(jogos);
+            try
+            {
+                var jogos = await _jogoRepositorio.BuscarPorDesenvolvedora(nome);
+                return Ok(jogos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorGenero/{nome}")]
         public async Task<ActionResult<JogoModel>> BuscarPorGenero(string nome)
         {
-            var jogos = await _jogoRepositorio.BuscarPorGenero(nome);
-            return Ok(jogos);
+            try
+            {
+                var jogos = await _jogoRepositorio.BuscarPorGenero(nome);
+                return Ok(jogos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpPost("Cadastrar")]
         public async Task<ActionResult<JogoModel>> Cadastrar([FromBody] JogoModel jogoModel)
         {
-            var jogo = await _jogoRepositorio.Adicionar(jogoModel);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Ok(jogo);
+                var jogo = await _jogoRepositorio.Adicionar(jogoModel);
+                return CreatedAtAction(nameof(BuscarPorId), new { id = jogo.Id }, jogo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<JogoModel>> Atualizar([FromBody] JogoModel jogoModel, int id)
         {
-            jogoModel.Id = id;
-            var jogo = await _jogoRepositorio.Atualizar(jogoModel, id);
-            return Ok(jogo);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                jogoModel.Id = id;
+                var jogo = await _jogoRepositorio.Atualizar(jogoModel, id);
+                return Ok(jogo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<JogoModel>> Apagar(int id)
         {
-            var apagado = await _jogoRepositorio.Apagar(id);
-
-            return Ok(apagado);
+            try
+            {
+                var apagado = await _jogoRepositorio.Apagar(id);
+                return Ok(new { mensagem = "Jogo removido com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
         }
     }
 }

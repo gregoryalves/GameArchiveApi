@@ -5,7 +5,8 @@ namespace GameArchive.Business.Interfaces
 {
     public interface IUsuarioBusiness
     {
-        string GerarHashMd5(string? senha);
+        string GerarHashSenha(string? senha);
+        bool VerificarSenha(string senha, string hash);
         Task<bool> ValidarEmailJaCadastrado(GameArchiveDbContext dbContext, UsuarioModel usuario);
     }
 }

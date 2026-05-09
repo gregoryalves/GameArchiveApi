@@ -1,4 +1,6 @@
 
+using GameArchive.Business;
+using GameArchive.Business.Interfaces;
 using GameArchive.Data;
 using GameArchive.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +20,27 @@ namespace GameArchive
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //Configuração do entity framework
+            // ConfiguraÃ§Ã£o de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            //Configuraï¿½ï¿½o do entity framework
             builder.Services.AddEntityFrameworkSqlServer().AddDbContext<GameArchiveDbContext>(
                     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
                 );
 
-            //Injeção de dependencia dos repositórios
+            //Injeï¿½ï¿½o de dependencia das Business classes
+            builder.Services.AddScoped<IUsuarioBusiness, UsuarioBusiness>();
+            builder.Services.AddScoped<IUsuarioJogoBusiness, UsuarioJogoBusiness>();
+
+            //Injeï¿½ï¿½o de dependencia dos repositï¿½rios
             builder.Services.AddScoped<IDesenvolvedoraRepositorio, DesenvolvedoraRepositorio>();
             builder.Services.AddScoped<IGeneroRepositorio, GeneroRepositorio>();
             builder.Services.AddScoped<IJogoRepositorio, JogoRepositorio>();
@@ -42,6 +59,8 @@ namespace GameArchive
             //}
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 

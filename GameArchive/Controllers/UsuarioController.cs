@@ -21,48 +21,92 @@ namespace GameArchive.Controllers
         [HttpGet("BuscarTodos")]
         public async Task<ActionResult<IEnumerable<UsuarioModel>>> BuscarTodos()
         {
-            var usuarios = await _usuarioRepositorio.BuscarTodos();
-
-            return Ok(usuarios);
+            try
+            {
+                var usuarios = await _usuarioRepositorio.BuscarTodos();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<UsuarioModel>> BuscarPorId(int id)
         {
-            var usuario = await _usuarioRepositorio.BuscarPorId(id);
-            return Ok(usuario);
+            try
+            {
+                var usuario = await _usuarioRepositorio.BuscarPorId(id);
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
         }
 
         [HttpPost("Cadastrar")]
         public async Task<ActionResult<UsuarioModel>> Cadastrar([FromBody] UsuarioModel usuarioModel)
         {
-            var usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Ok(usuario);
+                var usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
+                return CreatedAtAction(nameof(BuscarPorId), new { id = usuario.Id }, usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpPut("Atualizar/{id}")]
         public async Task<ActionResult<UsuarioModel>> Atualizar([FromBody] UsuarioModel usuarioModel, int id)
         {
-            usuarioModel.Id = id;
-            var usuario = await _usuarioRepositorio.Atualizar(usuarioModel, id);
-            return Ok(usuario);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                usuarioModel.Id = id;
+                var usuario = await _usuarioRepositorio.Atualizar(usuarioModel, id);
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
 
         [HttpDelete("Apagar/{id}")]
         public async Task<ActionResult<UsuarioModel>> Apagar(int id)
         {
-            var apagado = await _usuarioRepositorio.Apagar(id);
-
-            return Ok(apagado);
+            try
+            {
+                var apagado = await _usuarioRepositorio.Apagar(id);
+                return Ok(new { mensagem = "Usuário removido com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { mensagem = ex.Message });
+            }
         }
 
-        [HttpGet("Logar")]
-        public async Task<ActionResult<int>> Logar([FromQuery] LoginDataContract usuarioLogin)
+        [HttpPost("Logar")]
+        public async Task<ActionResult<int>> Logar([FromBody] LoginDataContract usuarioLogin)
         {
-            var usuarioId = await _usuarioRepositorio.Logar(usuarioLogin);
-
-            return Ok(usuarioId);
+            try
+            {
+                var usuarioId = await _usuarioRepositorio.Logar(usuarioLogin);
+                return Ok(new { usuarioId });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { mensagem = ex.Message });
+            }
         }
     }
 }

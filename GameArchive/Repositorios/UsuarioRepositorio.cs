@@ -10,10 +10,12 @@ namespace GameArchive.Repositorios.Interfaces
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
         private readonly GameArchiveDbContext _dbContext;
+        private readonly IUsuarioBusiness _usuarioBusiness;
 
-        public UsuarioRepositorio(GameArchiveDbContext gamerArchiveDbContext)
+        public UsuarioRepositorio(GameArchiveDbContext gamerArchiveDbContext, IUsuarioBusiness usuarioBusiness)
         {
             _dbContext = gamerArchiveDbContext;
+            _usuarioBusiness = usuarioBusiness;
         }
 
         public async Task<IEnumerable<UsuarioModel>> BuscarTodos()
@@ -45,16 +47,14 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<UsuarioModel> Adicionar(UsuarioModel usuario)
         {
-            IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-
-            var jaPossuiEmailNaBase = await usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
+            var jaPossuiEmailNaBase = await _usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
 
             if (jaPossuiEmailNaBase)
             {
                 throw new Exception($"O E-mail informado já está cadastrado.");
             }
 
-            usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
+            usuario.Senha = _usuarioBusiness.GerarHashSenha(usuario.Senha);
 
             await _dbContext.Usuarios.AddAsync(usuario);
             await _dbContext.SaveChangesAsync();
@@ -71,16 +71,14 @@ namespace GameArchive.Repositorios.Interfaces
                 throw new Exception($"Usuário com ID: {id} não foi encontrado no banco de dados.");
             }
 
-            IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-
-            var jaPossuiEmailNaBase = await usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
+            var jaPossuiEmailNaBase = await _usuarioBusiness.ValidarEmailJaCadastrado(_dbContext, usuario);
 
             if (jaPossuiEmailNaBase)
             {
                 throw new Exception($"O E-mail informado já está cadastrado.");
             }
 
-            usuario.Senha = usuarioBusiness.GerarHashMd5(usuario.Senha);
+            usuario.Senha = _usuarioBusiness.GerarHashSenha(usuario.Senha);
 
             usuarioPorId.Nome = usuario.Nome;
             usuarioPorId.DataNascimento = usuario.DataNascimento;
@@ -110,12 +108,9 @@ namespace GameArchive.Repositorios.Interfaces
 
         public async Task<int> Logar(LoginDataContract usuarioLogin)
         {
-            IUsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-            usuarioLogin.Senha = usuarioBusiness.GerarHashMd5(usuarioLogin.Senha);
+            var usuarioRetornado = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuarioLogin.Email);
 
-            var usuarioRetornado = await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Email == usuarioLogin.Email && x.Senha == usuarioLogin.Senha);
-
-            if (usuarioRetornado == null)
+            if (usuarioRetornado == null || !_usuarioBusiness.VerificarSenha(usuarioLogin.Senha, usuarioRetornado.Senha))
             {
                 throw new Exception($"E-mail ou senha inválidos.");
             }
